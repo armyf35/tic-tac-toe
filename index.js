@@ -2,17 +2,18 @@
 /* eslint no-plusplus: ['error', { 'allowForLoopAfterthoughts': true }]*/
 /* eslint no-console: 0 */
 const readline = require('readline');
+
 const readInput = readline.createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
 });
 
 class TicTacToe {
-  constructor() {
+  constructor(rows = 3, columns = 3) {
     this.board = [];
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < rows; i++) {
       this.board.push([]);
-      for (let j = 0; j < 3; j++) {
+      for (let j = 0; j < columns; j++) {
         this.board[i].push(0);
       }
     }
@@ -75,10 +76,10 @@ class TicTacToe {
       for (let j = 0; j < this.board[i].length; j++) {
         sum += this.board[i][j];
       }
-      if (sum === 3) {
+      if (sum === this.board.length) {
         return 'X is a winner';
       }
-      if (sum === -3) {
+      if (sum === -this.board.length) {
         return 'O is a winner';
       }
     }
@@ -87,10 +88,10 @@ class TicTacToe {
     for (let i = 0; i < this.board.length; i++) { // Check each column
       sum += this.board[i][0];
     }
-    if (sum === 3) {
+    if (sum === this.board.length) {
       return 'X is a winner';
     }
-    if (sum === -3) {
+    if (sum === -this.board.length) {
       return 'O is a winner';
     }
 
@@ -98,10 +99,10 @@ class TicTacToe {
     for (let i = 0; i < this.board.length; i++) { // Top Left to bottom right diagnol
       sum += this.board[i][i];
     }
-    if (sum === 3) {
+    if (sum === this.board.length) {
       return 'X is a winner';
     }
-    if (sum === -3) {
+    if (sum === -this.board.length) {
       return 'O is a winner';
     }
 
@@ -109,10 +110,10 @@ class TicTacToe {
     for (let i = 0; i < this.board.length; i++) { // Top Right to bottom left diagnol
       sum += this.board[i][this.board.length - (i + 1)];
     }
-    if (sum === 3) {
+    if (sum === this.board.length) {
       return 'X is a winner';
     }
-    if (sum === -3) {
+    if (sum === -this.board.length) {
       return 'O is a winner';
     }
 
@@ -132,31 +133,39 @@ const done = () => {
   process.exit();
 };
 
-for (let i = 0; i < 10; i++) {
-  if (i === 10) done();
+let roundNum = 0;
+const runRound = () => {
+  if (roundNum > 8) done();
 
   console.log(game.display());
-  if (i % 2 === 0) { // Even so player X can go
+  if (roundNum % 2 === 0) { // Even so player X can go
     let x;
     let y;
 
-    readInput.question('Player X enter the coordinates you cant to place a piece at X,Y', (input) => {
+    readInput.question('Player X enter the coordinates you cant to place a piece at X,Y\n', (input) => {
       [x, y] = input.split(',');
       game.setSpot(x, y, 'x');
       if (game.checkWinner()) {
         done();
+      } else {
+        roundNum += 1;
+        runRound();
       }
     });
   } else { // Odd so player O can go
     let x;
     let y;
 
-    readInput.question('Player Y enter the coordinates you cant to place a piece at X,Y', (input) => {
+    readInput.question('Player O enter the coordinates you cant to place a piece at X,Y\n', (input) => {
       [x, y] = input.split(',');
-      game.setSpot(x, y, 'Y');
+      game.setSpot(x, y, 'o');
       if (game.checkWinner()) {
         done();
+      } else {
+        roundNum += 1;
+        runRound();
       }
     });
   }
-}
+};
+runRound();
