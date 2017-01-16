@@ -1,6 +1,11 @@
 #!/usr/bin/env node --harmony
 /* eslint no-plusplus: ['error', { 'allowForLoopAfterthoughts': true }]*/
 /* eslint no-console: 0 */
+const readline = require('readline');
+const readInput = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
 
 class TicTacToe {
   constructor() {
@@ -112,5 +117,46 @@ class TicTacToe {
     }
 
     return false;
+  }
+}
+
+module.exports = TicTacToe;
+
+const game = new TicTacToe();
+
+const done = () => {
+  console.log('Bye');
+  console.log(game.checkWinner());
+  console.log(game.display());
+  readInput.close();
+  process.exit();
+};
+
+for (let i = 0; i < 10; i++) {
+  if (i === 10) done();
+
+  console.log(game.display());
+  if (i % 2 === 0) { // Even so player X can go
+    let x;
+    let y;
+
+    readInput.question('Player X enter the coordinates you cant to place a piece at X,Y', (input) => {
+      [x, y] = input.split(',');
+      game.setSpot(x, y, 'x');
+      if (game.checkWinner()) {
+        done();
+      }
+    });
+  } else { // Odd so player O can go
+    let x;
+    let y;
+
+    readInput.question('Player Y enter the coordinates you cant to place a piece at X,Y', (input) => {
+      [x, y] = input.split(',');
+      game.setSpot(x, y, 'Y');
+      if (game.checkWinner()) {
+        done();
+      }
+    });
   }
 }
