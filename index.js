@@ -60,4 +60,57 @@ class TicTacToe {
   setSpot(x, y, type) {
     this.board[y - 1][x - 1] = this.map[type];
   }
+
+  checkWinner() {
+    // Can use reduce for all of these but did the quicker way
+    let sum = 0;
+
+    for (let i = 0; i < this.board.length; i++) { // Check each row
+      sum = 0;
+      for (let j = 0; j < this.board[i].length; j++) {
+        sum += this.board[i][j];
+      }
+      if (sum === 3) {
+        return 'X is a winner';
+      }
+      if (sum === -3) {
+        return 'O is a winner';
+      }
+    }
+
+    sum = 0;
+    for (let i = 0; i < this.board.length; i++) { // Check each column
+      sum += this.board[i][0];
+    }
+    if (sum === 3) {
+      return 'X is a winner';
+    }
+    if (sum === -3) {
+      return 'O is a winner';
+    }
+
+    sum = 0;
+    for (let i = 0; i < this.board.length; i++) { // Top Left to bottom right diagnol
+      sum += this.board[i][i];
+    }
+    if (sum === 3) {
+      return 'X is a winner';
+    }
+    if (sum === -3) {
+      return 'O is a winner';
+    }
+
+    sum = 0;
+    for (let i = 0; i < this.board.length; i++) { // Top Right to bottom left diagnol
+      sum += this.board[i][this.board.length - (i + 1)];
+    }
+    if (sum === 3) {
+      return 'X is a winner';
+    }
+    if (sum === -3) {
+      return 'O is a winner';
+    }
+
+    return false;
+  }
 }
