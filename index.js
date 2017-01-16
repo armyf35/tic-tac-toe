@@ -11,6 +11,14 @@ class TicTacToe {
         this.board[i].push(0);
       }
     }
+
+    this.map = {
+      '-1': 'O',
+      o: -1,
+      0: ' ',
+      1: 'X',
+      x: 1,
+    };
   }
 
   display() {
@@ -38,20 +46,18 @@ class TicTacToe {
   }
 
   displayRow(row) {
-    const map = {
-      '-1': 'O',
-      0: ' ',
-      1: 'X',
-    };
-
     let result = '|';
 
     row.forEach((spot) => {
-      result += ` ${map[spot]} |`;
+      result += ` ${this.map[spot]} |`;
     });
 
     result += '\n';
 
     return result;
+  }
+
+  setSpot(x, y, type) {
+    this.board[y - 1][x - 1] = this.map[type];
   }
 }
